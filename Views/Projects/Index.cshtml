@@ -6,6 +6,7 @@
 
 <div class="text-center">
     <h1 class="display-4">Projects</h1>
+    <a class="text-dark" asp-area="" asp-controller="Projects" asp-action="Create">Create Project</a>
     <table class="table">
         <thead>
         <tr>
@@ -22,7 +23,7 @@
             {
                 <tr>
                     <td>
-                        @item.Name
+                        <strong-text text="@item.Name"></strong-text>
                     </td>
                     <td>
                         @Html.DateFormat(item.Deadline)

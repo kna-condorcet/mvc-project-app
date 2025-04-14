@@ -1,3 +1,4 @@
+using Condorcet.B2.AspnetCore.MVC.Application.Core.Domain;
 using Condorcet.B2.AspnetCore.MVC.Application.Core.Repository;
 using Condorcet.B2.AspnetCore.MVC.Application.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,21 @@ namespace Condorcet.B2.AspnetCore.MVC.Application.Controllers
             {
                 Projects = projects
             });
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+        
+        [HttpPost]
+        public IActionResult Create(CreateProjectViewModel model)
+        {
+            _projectRepository.Insert(new Project
+            {
+                Name = model.Name
+            });
+            return RedirectToAction(nameof(Index));
         }
 
     }

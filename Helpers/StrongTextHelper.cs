@@ -5,7 +5,7 @@ namespace Condorcet.B2.AspnetCore.MVC.Application.Helpers;
 [HtmlTargetElement("strong-text")]
 public class StrongTextHelper: TagHelper
 {
-    [HtmlAttributeName("Text")]
+    [HtmlAttributeName("text")]
     public string Text { get; set; }
 
     public override void Process(TagHelperContext context, TagHelperOutput output)
