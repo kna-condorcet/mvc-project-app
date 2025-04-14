@@ -1,6 +1,9 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Condorcet.B2.AspnetCore.MVC.Application.Models;
 
 public class CreateProjectViewModel
 {
-    public string Name { get; set; }
+    [Required]
+    public required string Name { get; set; }
 }

@@ -31,9 +31,13 @@ namespace Condorcet.B2.AspnetCore.MVC.Application.Controllers
         }
         
         [HttpPost]
-        public IActionResult Create(CreateProjectViewModel model)
+        public async Task<IActionResult> Create(CreateProjectViewModel model)
         {
-            _projectRepository.Insert(new Project
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            await _projectRepository.Insert(new Project
             {
                 Name = model.Name
             });
