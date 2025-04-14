@@ -25,7 +25,7 @@
                         @item.Name
                     </td>
                     <td>
-                        @item.Deadline?.ToString("d")
+                        @Html.DateFormat(item.Deadline)
                     </td>
                 </tr>
             }
