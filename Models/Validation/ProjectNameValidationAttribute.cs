@@ -12,9 +12,15 @@ public class ProjectCodeUniqueValidationAttribute: ValidationAttribute
             return new ValidationResult("Le nom est requis");
         }
 
+        var currentModel = validationContext.ObjectInstance as ProjectFormViewModel;
+        
+        var currentId = currentModel?.Id;
+        
         var repository = validationContext.GetRequiredService<IProjectRepository>();
 
-        var projectExistsTask = repository.ProjectCodeExists(value as string);
+        var projectExistsTask = currentId.HasValue ? 
+            repository.ProjectCodeExists(value as string, currentId.Value)
+            :repository.ProjectCodeExists(value as string);
 
         if (projectExistsTask.GetAwaiter().GetResult())
             return new ValidationResult("Ce code projet existe déjà");

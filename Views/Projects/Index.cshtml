@@ -6,30 +6,49 @@
 
 <div class="text-center">
     <h1 class="display-4">Projects</h1>
-    <a class="text-dark" asp-area="" asp-controller="Projects" asp-action="Create">Create Project</a>
+    <a class="text-dark" asp-controller="Projects" asp-action="Create">Create Project</a>
     <table class="table">
         <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Projects[0].Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Projects[0].ExpectedEndDate)
-            </th>
+            <th>@Html.DisplayNameFor(model => model.Projects[0].ProjectCode)</th>
+            <th>@Html.DisplayNameFor(model => model.Projects[0].Title)</th>
+            <th>@Html.DisplayNameFor(model => model.Projects[0].StartDate)</th>
+            <th>@Html.DisplayNameFor(model => model.Projects[0].ExpectedEndDate)</th>
+            <th>@Html.DisplayNameFor(model => model.Projects[0].Priority)</th>
+            <th>@Html.DisplayNameFor(model => model.Projects[0].Budget)</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.Projects)
-            {
-                <tr>
-                    <td>
-                        <strong-text text="@item.Title"></strong-text>
-                    </td>
-                    <td>
-                        @Html.DateFormat(item.ExpectedEndDate)
-                    </td>
-                </tr>
-            }
+        @foreach (var item in Model.Projects)
+        {
+            <tr>
+                <td>
+                    <span>@item.ProjectCode</span>
+                </td>
+                <td>
+                    <strong-text text="@item.Title"></strong-text>
+                </td>
+                <td>
+                    @Html.DateFormat(item.StartDate)
+                </td>
+                <td>
+                    @Html.DateFormat(item.ExpectedEndDate)
+                </td>
+                <td>
+                    <span>@item.Priority.ToString()</span>
+                </td>
+                <td>
+                    @item.Budget.ToString("C0")
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id"
+                       class="btn btn-sm btn-outline-secondary" title="Modifier">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                </td>
+            </tr>
+        }
         </tbody>
     </table>
 </div>

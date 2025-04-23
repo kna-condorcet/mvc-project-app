@@ -1,16 +1,16 @@
 @model ProjectFormViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 
-<h1>Create</h1>
+<h1>Edit</h1>
 
 <h4>Project</h4>
 
-<form asp-action="Create">
+<form asp-action="Edit">
     <div class="form-group">
         <partial name="_ProjectForm" model="Model" />
-        <input type="submit" value="Create" class="btn btn-primary"/>
+        <input type="submit" value="Sauver" class="btn btn-primary"/>
     </div>
 </form>

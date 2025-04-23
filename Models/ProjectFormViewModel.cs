@@ -4,8 +4,9 @@ using Condorcet.B2.AspnetCore.MVC.Application.Models.Validation;
 
 namespace Condorcet.B2.AspnetCore.MVC.Application.Models;
 
-public class CreateProjectViewModel : IValidatableObject
+public class ProjectFormViewModel : IValidatableObject
 {
+    public int? Id { get; set; }
     [Required(ErrorMessage = "Le titre est obligatoire")]
     [StringLength(100, ErrorMessage = "Le titre ne peut pas dépasser 100 caractères")]
     public string Title { get; set; }

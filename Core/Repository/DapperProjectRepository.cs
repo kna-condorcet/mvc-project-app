@@ -25,7 +25,8 @@ namespace Condorcet.B2.AspnetCore.MVC.Application.Core.Repository
         public async Task<Project?> GetById(int id)
         {
             using var connection = await _dbConnectionProvider.CreateConnection();
-            return await connection.QueryFirstOrDefaultAsync<Project>("SELECT id, name, deadline FROM projects WHERE id = @id",
+            return await connection.QueryFirstOrDefaultAsync<Project>(
+                "SELECT id, title, project_code as projectCode, description, start_date as startDate, expected_end_date as expectedEndDate, priority, budget FROM projects WHERE id = @id",
                 new { id });
         }
 
@@ -65,7 +66,15 @@ namespace Condorcet.B2.AspnetCore.MVC.Application.Core.Repository
             project.Id = id;
             using var connection = await _dbConnectionProvider.CreateConnection();
             return await connection.ExecuteAsync("""
-                                                 UPDATE projects SET name = @name, deadline = @deadline
+                                                 UPDATE projects 
+                                                 SET 
+                                                     title = @title, 
+                                                     project_code = @projectCode,
+                                                     description = @description,
+                                                     start_date = @startDate,
+                                                     expected_end_date = @expectedEndDate,
+                                                     priority = @priority,
+                                                     budget = @budget
                                                  WHERE id = @id;
                                                  """, project);
         }
@@ -88,6 +97,20 @@ namespace Condorcet.B2.AspnetCore.MVC.Application.Core.Repository
 
             var count = await connection.ExecuteScalarAsync<int>(
                 sql, new { code });
+
+            return count > 0;
+        }
+        
+        public async Task<bool> ProjectCodeExists(string code, int excludedId)
+        {
+            using var connection = await _dbConnectionProvider.CreateConnection();
+            const string sql = """
+                               SELECT COUNT(1) FROM projects 
+                               WHERE project_code = @code AND id <> @excludedId
+                               """;
+
+            var count = await connection.ExecuteScalarAsync<int>(
+                sql, new { code, excludedId });
 
             return count > 0;
         }

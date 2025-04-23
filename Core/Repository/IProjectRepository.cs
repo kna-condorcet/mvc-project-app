@@ -12,5 +12,6 @@ namespace Condorcet.B2.AspnetCore.MVC.Application.Core.Repository
 
         Task<bool> Exists(string? name);
         Task<bool> ProjectCodeExists(string code);
+        Task<bool> ProjectCodeExists(string code, int excludedId);
     }
 }
