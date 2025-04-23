@@ -47,5 +47,13 @@ namespace Condorcet.B2.AspnetCore.MVC.Application.Core.Repository
                                                  WHERE id = @id;
                                                  """, project);
         }
+
+        public async Task<bool> Exists(string? name)
+        {
+            using var connection = await _dbConnectionProvider.CreateConnection();
+            return await connection.ExecuteScalarAsync<bool>("""
+                                                             SELECT EXISTS (SELECT 1 FROM projects WHERE name = @name)
+                                                             """, new {name});
+        }
     }
 }

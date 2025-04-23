@@ -10,5 +10,6 @@ namespace Condorcet.B2.AspnetCore.MVC.Application.Core.Repository
         public Task<int> Insert(Project project);
         public Task<int> Update(int id, Project project);
 
+        Task<bool> Exists(string? name);
     }
 }
