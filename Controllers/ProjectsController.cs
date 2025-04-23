@@ -39,7 +39,13 @@ namespace Condorcet.B2.AspnetCore.MVC.Application.Controllers
             }
             await _projectRepository.Insert(new Project
             {
-                Name = model.Name
+                Title = model.Title,
+                Description = model.Description,
+                StartDate = model.StartDate,
+                ExpectedEndDate = model.ExpectedEndDate,
+                Priority = (int)model.Priority,
+                Budget = model.Budget,
+                ProjectCode = model.ProjectCode
             });
             return RedirectToAction(nameof(Index));
         }

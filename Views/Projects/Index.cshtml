@@ -11,10 +11,10 @@
         <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Projects[0].Name)
+                @Html.DisplayNameFor(model => model.Projects[0].Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Projects[0].Deadline)
+                @Html.DisplayNameFor(model => model.Projects[0].ExpectedEndDate)
             </th>
         </tr>
         </thead>
@@ -23,10 +23,10 @@
             {
                 <tr>
                     <td>
-                        <strong-text text="@item.Name"></strong-text>
+                        <strong-text text="@item.Title"></strong-text>
                     </td>
                     <td>
-                        @Html.DateFormat(item.Deadline)
+                        @Html.DateFormat(item.ExpectedEndDate)
                     </td>
                 </tr>
             }

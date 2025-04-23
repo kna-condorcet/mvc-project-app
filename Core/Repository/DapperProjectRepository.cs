@@ -16,7 +16,9 @@ namespace Condorcet.B2.AspnetCore.MVC.Application.Core.Repository
         public async Task<List<Project>> GetAll()
         {
             using var connection = await _dbConnectionProvider.CreateConnection();
-            var result = await connection.QueryAsync<Project>("SELECT id, name, deadline FROM projects ORDER BY id");
+            var result =
+                await connection.QueryAsync<Project>(
+                    "SELECT id, title, project_code as projectCode, description, start_date as startDate, expected_end_date as expectedEndDate, priority, budget FROM projects ORDER BY id");
             return result.ToList();
         }
 
@@ -30,12 +32,32 @@ namespace Condorcet.B2.AspnetCore.MVC.Application.Core.Repository
         public async Task<int> Insert(Project project)
         {
             using var connection = await _dbConnectionProvider.CreateConnection();
-            var newId = await connection.ExecuteScalarAsync<int>("""
-                                                 INSERT INTO projects(name, deadline) 
-                                                 VALUES(@name, @deadline)
-                                                 RETURNING id
-                                                 """, project);
-            return newId;
+            const string sql = """
+                               INSERT INTO projects 
+                               (
+                                   title, 
+                                   project_code, 
+                                   description, 
+                                   start_date, 
+                                   expected_end_date, 
+                                   priority, 
+                                   budget
+                               )
+                               VALUES 
+                               (
+                                   @Title, 
+                                   @ProjectCode, 
+                                   @Description, 
+                                   @StartDate, 
+                                   @ExpectedEndDate, 
+                                   @Priority, 
+                                   @Budget
+                               )
+                               RETURNING id
+                               """;
+            var id = await connection.ExecuteScalarAsync<int>(sql, project);
+
+            return id;
         }
 
         public async Task<int> Update(int id, Project project)
@@ -54,6 +76,20 @@ namespace Condorcet.B2.AspnetCore.MVC.Application.Core.Repository
             return await connection.ExecuteScalarAsync<bool>("""
                                                              SELECT EXISTS (SELECT 1 FROM projects WHERE name = @name)
                                                              """, new {name});
+        }
+
+        public async Task<bool> ProjectCodeExists(string code)
+        {
+            using var connection = await _dbConnectionProvider.CreateConnection();
+            const string sql = """
+                               SELECT COUNT(1) FROM projects 
+                               WHERE project_code = @code
+                               """;
+
+            var count = await connection.ExecuteScalarAsync<int>(
+                sql, new { code });
+
+            return count > 0;
         }
     }
 }
