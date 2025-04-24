@@ -1,3 +1,4 @@
+using Condorcet.B2.AspnetCore.MVC.Application.Core.Services;
 using Condorcet.B2.AspnetCore.MVC.Application.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -5,6 +6,13 @@ namespace Condorcet.B2.AspnetCore.MVC.Application.Controllers;
 
 public class AccountController : Controller
 {
+    private readonly IAuthService _authService;
+
+    public AccountController(IAuthService authService)
+    {
+        _authService = authService;
+    }
+
     // GET
     public IActionResult Register()
     {
@@ -12,11 +20,17 @@ public class AccountController : Controller
     }
 
     [HttpPost]
-    public IActionResult Register(RegisterUserViewModel model)
+    public async Task<IActionResult> Register(RegisterUserViewModel model)
     {
         if (!ModelState.IsValid)
             return View();
 
+        var success = await _authService.RegisterUserAsync(model);
+        if (!success)
+        {
+            ModelState.AddModelError("", "Le nom d'utilisateur existe déjà");
+            return View();
+        }
 
         return RedirectToAction(nameof(Login));
     }

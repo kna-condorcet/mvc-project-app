@@ -1,5 +1,6 @@
 using Condorcet.B2.AspnetCore.MVC.Application.Core.Infrastructure;
 using Condorcet.B2.AspnetCore.MVC.Application.Core.Repository;
+using Condorcet.B2.AspnetCore.MVC.Application.Core.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IProjectRepository, DapperProjectRepository>();
 builder.Services.AddScoped<IDbConnectionProvider, PGSqlDbConnectionProvider>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+builder.Services.AddScoped<IUserRepository, DapperUserRepository>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 var app = builder.Build();
 
