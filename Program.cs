@@ -1,6 +1,9 @@
 using Condorcet.B2.AspnetCore.MVC.Application.Core.Infrastructure;
 using Condorcet.B2.AspnetCore.MVC.Application.Core.Repository;
 using Condorcet.B2.AspnetCore.MVC.Application.Core.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
+Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +14,21 @@ builder.Services.AddScoped<IDbConnectionProvider, PGSqlDbConnectionProvider>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IUserRepository, DapperUserRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+
+// Configuration de l'authentification par cookies
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.AccessDeniedPath = "/Account/AccessDenied";
+        options.ExpireTimeSpan = TimeSpan.FromDays(14);
+    });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("CreateProjectPolicy", 
+        policy => policy.RequireRole("Admin", "User"));
+});
 
 var app = builder.Build();
 
@@ -25,6 +43,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

@@ -1,6 +1,7 @@
 using Condorcet.B2.AspnetCore.MVC.Application.Core.Domain;
 using Condorcet.B2.AspnetCore.MVC.Application.Core.Repository;
 using Condorcet.B2.AspnetCore.MVC.Application.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Condorcet.B2.AspnetCore.MVC.Application.Controllers
@@ -25,12 +26,14 @@ namespace Condorcet.B2.AspnetCore.MVC.Application.Controllers
             });
         }
 
+        [Authorize(Policy = "CreateProjectPolicy")]
         public IActionResult Create()
         {
             return View();
         }
         
         [HttpPost]
+        [Authorize(Policy = "CreateProjectPolicy")]
         public async Task<IActionResult> Create(ProjectFormViewModel model)
         {
             if (!ModelState.IsValid)

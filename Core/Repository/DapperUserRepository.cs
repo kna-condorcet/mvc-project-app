@@ -33,4 +33,11 @@ public class DapperUserRepository : IUserRepository
                                                          SELECT EXISTS (SELECT * FROM users WHERE username = @username)
                                                          """, new { username });
     }
+
+    public async Task<User?> GetByUsernameAsync(string username)
+    {
+        using var connection = await _dbConnectionProvider.CreateConnection();
+        const string sql = "SELECT * FROM users WHERE username = @username";
+        return await connection.QuerySingleOrDefaultAsync<User>(sql, new { username });
+    }
 }
